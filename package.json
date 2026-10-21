@@ -1,6 +1,6 @@
 {
   "name": "garmin-personal-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for your own Garmin data, using Garmin's Personal API key. Full history, FIT files, runs locally.",
   "license": "MIT",
   "type": "module",

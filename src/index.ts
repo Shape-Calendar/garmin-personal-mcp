@@ -2,6 +2,8 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createServer as createHttpServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { Readable } from "node:stream";
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { createServer } from "./server.js";
 import { createFetchHandler } from "./http.js";
 
@@ -68,7 +70,14 @@ function httpServer(apiKeyFile: string | undefined): Server {
   });
 }
 
-const invokedDirectly = Boolean(process.argv[1]) && import.meta.url.endsWith(process.argv[1].replace(/^.*\//, "/"));
+// npm's bin shim is a symlink (node_modules/.bin/garmin-personal-mcp), so compare real paths.
+const invokedDirectly = (() => {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+})();
 // Serverless launchers (Vercel) import this module and take the default export; a
 // platform that hands us PORT (Railway, Fly, Render) runs it and expects us to listen.
 const onVercel = process.env.VERCEL === "1";
