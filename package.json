@@ -1,0 +1,51 @@
+{
+  "name": "garmin-personal-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for your own Garmin data, using Garmin's Personal API key. Full history, FIT files, runs locally.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "garmin-personal-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm build",
+    "start": "node dist/index.js --http"
+  },
+  "keywords": [
+    "garmin",
+    "mcp",
+    "model-context-protocol",
+    "garmin-connect",
+    "personal-api",
+    "claude",
+    "fit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shape-Calendar/garmin-personal-mcp"
+  },
+  "dependencies": {
+    "@garmin/fitsdk": "^21.218.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "fflate": "^0.8.3",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}
