@@ -3,6 +3,7 @@ import { TokenProvider, resolveApiKey } from "./auth.js";
 import { GarminClient } from "./client.js";
 import { registerTools } from "./tools.js";
 import { VERSION } from "./version.js";
+import { registerConnectMetricsTools } from "./connect-tools.js";
 
 export function buildServer(garmin: GarminClient): McpServer {
   const server = new McpServer(
@@ -16,6 +17,7 @@ export function buildServer(garmin: GarminClient): McpServer {
     },
   );
   registerTools(server, garmin);
+  registerConnectMetricsTools(server);
   return server;
 }
 
