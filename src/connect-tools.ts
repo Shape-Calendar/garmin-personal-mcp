@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Garmin } from "garminconnect-js";
 import { finishGarminConnectLogin, startGarminConnectLogin, withGarminConnect } from "./connect-auth.js";
 
-const isoDate = z.string().regex(/^\\d{4}-\\d{2}-\\d{2}$/, "Use YYYY-MM-DD.");
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD.");
 const dateFields = { date: isoDate.optional(), from_date: isoDate.optional(), to_date: isoDate.optional() };
 const MAX_RANGE_DAYS = 366;
 
