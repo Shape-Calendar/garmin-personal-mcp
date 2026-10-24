@@ -81,9 +81,9 @@ The activity list pages all the way back to the first activity on the account, 5
 | `get_weight`, `get_weight_goals` | Measurements and goals, up to a year. |
 | `get_food_logs` | Nutrition for one day. |
 | `get_profile`, `get_heart_rate_zones`, `get_fitness_age` | Settings, zones per sport, fitness age. |
-| `get_vo2_max` | Running and cycling VO₂ max via the separate Garmin Connect session. |
-| `get_cycling_ftp` | Latest cycling functional threshold power (FTP) via Garmin Connect. |
-| `get_training_status` | Training status for a date via Garmin Connect. |
+| `get_vo2_max` | Latest VO₂ max, a specific date, or history for a date range via Garmin Connect. |
+| `get_cycling_ftp` | Latest cycling FTP, a specific date, or date-range history via Garmin Connect. |
+| `get_training_status` | Latest training status, a specific date, or daily records across a date range via Garmin Connect. |
 | `garmin_connect_login`, `garmin_connect_verify_mfa` | Start Garmin Connect sign-in and complete MFA when required. Credentials are deployment secrets, never tool arguments. |
 | `get_menstrual_cycle_summary`, `get_menstrual_cycle_day` | Cycle data for a date. |
 | `get_raw` | GET any other Personal API path, for endpoints Garmin adds later. |
@@ -113,11 +113,8 @@ The Personal API tools continue using `GARMIN_PERSONAL_API_KEY`. The three addit
 |---|---|
 | `GARMIN_CONNECT_EMAIL` | Garmin Connect account email |
 | `GARMIN_CONNECT_PASSWORD` | Garmin Connect password |
-| `GARMIN_CONNECT_ENCRYPTION_KEY` | 32 random bytes encoded as 64 hex characters; generate with `openssl rand -hex 32` |
-| `KV_REST_API_URL` | REST URL from a Vercel KV/Upstash Redis database |
-| `KV_REST_API_TOKEN` | Private REST access token for that database |
 
-The code encrypts OAuth tokens and pending MFA state with AES-256-GCM before storing them in KV. Deploy the variables only as server-side secrets; never put them in `NEXT_PUBLIC_*` variables, source control, or MCP arguments. After deploying, call `garmin_connect_login`; if Garmin asks for verification, call `garmin_connect_verify_mfa` with the one-time code. Authentication and the metric endpoints are unofficial and may need maintenance if Garmin changes its sign-in or API behavior. If you don't configure these variables, existing Personal API tools remain available, while these additional tools return a configuration error.
+No database, KV store, cache, or disk storage is used for Garmin Connect sessions. Session tokens and pending MFA state live only in process memory and disappear when the runtime instance restarts. Configure only `GARMIN_CONNECT_EMAIL` and `GARMIN_CONNECT_PASSWORD` as private server-side environment variables, then call `garmin_connect_login`; if Garmin asks for verification, call `garmin_connect_verify_mfa`. On serverless platforms, login, MFA, and metric requests may reach different instances, and a restart clears authentication; this is the intentional trade-off for no persistent session storage. These tools support latest values by default, `date` for a single date, or `from_date` and `to_date` for an inclusive range (maximum 366 days per call).
 
 **Run it on a machine you own** (a VPS, a home server, a Pi):
 
