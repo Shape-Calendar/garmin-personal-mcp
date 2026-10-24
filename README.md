@@ -81,6 +81,10 @@ The activity list pages all the way back to the first activity on the account, 5
 | `get_weight`, `get_weight_goals` | Measurements and goals, up to a year. |
 | `get_food_logs` | Nutrition for one day. |
 | `get_profile`, `get_heart_rate_zones`, `get_fitness_age` | Settings, zones per sport, fitness age. |
+| `get_vo2_max` | Running and cycling VO₂ max via the separate Garmin Connect session. |
+| `get_cycling_ftp` | Latest cycling functional threshold power (FTP) via Garmin Connect. |
+| `get_training_status` | Training status for a date via Garmin Connect. |
+| `garmin_connect_login`, `garmin_connect_verify_mfa` | Start Garmin Connect sign-in and complete MFA when required. Credentials are deployment secrets, never tool arguments. |
 | `get_menstrual_cycle_summary`, `get_menstrual_cycle_day` | Cycle data for a date. |
 | `get_raw` | GET any other Personal API path, for endpoints Garmin adds later. |
 
@@ -100,6 +104,20 @@ It is stateless: each request builds its own server and transport, no session id
 | `MCP_BEARER_TOKEN` | a secret you make up, e.g. `openssl rand -hex 32` |
 
 The endpoint is `https://<your app>/mcp` on all of them. Railway, Render and Fly run `pnpm start`, which binds to the port they assign; Vercel imports the same entry and serves it as a function. On Vercel, use the production URL: preview URLs sit behind Vercel's own login, which MCP clients can't pass.
+
+### Optional Garmin Connect metrics authentication
+
+The Personal API tools continue using `GARMIN_PERSONAL_API_KEY`. The three additional performance-metric tools use an independent, unofficial Garmin Connect web-session login. To enable them on Vercel, configure these **private server-side environment variables**:
+
+| Variable | Value |
+|---|---|
+| `GARMIN_CONNECT_EMAIL` | Garmin Connect account email |
+| `GARMIN_CONNECT_PASSWORD` | Garmin Connect password |
+| `GARMIN_CONNECT_ENCRYPTION_KEY` | 32 random bytes encoded as 64 hex characters; generate with `openssl rand -hex 32` |
+| `KV_REST_API_URL` | REST URL from a Vercel KV/Upstash Redis database |
+| `KV_REST_API_TOKEN` | Private REST access token for that database |
+
+The code encrypts OAuth tokens and pending MFA state with AES-256-GCM before storing them in KV. Deploy the variables only as server-side secrets; never put them in `NEXT_PUBLIC_*` variables, source control, or MCP arguments. After deploying, call `garmin_connect_login`; if Garmin asks for verification, call `garmin_connect_verify_mfa` with the one-time code. Authentication and the metric endpoints are unofficial and may need maintenance if Garmin changes its sign-in or API behavior. If you don't configure these variables, existing Personal API tools remain available, while these additional tools return a configuration error.
 
 **Run it on a machine you own** (a VPS, a home server, a Pi):
 
