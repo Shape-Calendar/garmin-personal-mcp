@@ -519,8 +519,6 @@ packages:
       tarball: https://registry.npmjs.org/garminconnect-js/-/garminconnect-js-0.10.0.tgz
     engines: {node: '>=18'}
 
-  garminconnect-js@0.10.0: {}
-
   fflate@0.8.3:
     resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
@@ -981,6 +979,8 @@ packages:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
 snapshots:
+
+  garminconnect-js@0.10.0: {}
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true
