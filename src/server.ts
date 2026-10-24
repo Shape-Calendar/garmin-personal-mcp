@@ -10,7 +10,7 @@ export function buildServer(garmin: GarminClient): McpServer {
     { name: "garmin-personal-mcp", version: VERSION },
     {
       instructions:
-        "Read-only access to one person's Garmin Connect data through Garmin's Personal API. " +
+        "Read-only access to one person's Garmin data. Most tools use Garmin's Personal API; VO₂ max, cycling FTP, and training status use a separate Garmin Connect web session. " +
         "Activities go back to the first one ever recorded; page with list_activities. " +
         "Health endpoints are per day or per short date range (limits are stated on each tool). " +
         "All dates are YYYY-MM-DD in the athlete's local calendar.",
