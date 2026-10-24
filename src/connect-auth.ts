@@ -51,7 +51,7 @@ export async function startGarminConnectLogin(): Promise<{ status: string; messa
   const client = newClient();
   const result = await client.login(email, password);
   if (result.state === "mfa_required") {
-    await write(MFA_KEY, result.mfaState);
+    await command(["SET", MFA_KEY, encrypt(result.mfaState), "EX", "600"]);
     return { status: "mfa_required", message: "Garmin requires a verification code. Call garmin_connect_verify_mfa with the code sent by Garmin." };
   }
   await command(["DEL", MFA_KEY]);
